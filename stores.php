@@ -66,10 +66,10 @@
                 Chart Menu
             </div>
 
-            <li class="nav-item">
-                <a class="nav-link" href="customer.php">
+           <li class="nav-item">
+                <a class="nav-link" href="sales.php">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Customer Chart</span>
+                    <span>Sales Chart</span>
                 </a>
             </li>
 
@@ -84,16 +84,16 @@
             <!-- <hr class="sidebar-divider"> -->
 
             <li class="nav-item">
-                <a class="nav-link" href="film.php">
+                <a class="nav-link" href="product.php">
                     <i class="fa fa-film"></i>
-                    <span>Film Chart</span>
+                    <span>Product Chart</span>
                 </a>
             </li>
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="stores.php">
                     <i class="fas fa-store"></i>
-                    <span>Store Chart</span>
+                    <span>Territory Chart</span>
                 </a>
             </li>
 
@@ -196,19 +196,19 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Jumlah Transaksi di Toko Lethbridge</div>
+                                                Jumlah Unit Terjual di Wilayah Canada</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php  
                                                  $host       = "localhost";
                                                  $user       = "root";
                                                  $password   = "";
-                                                 $database   = "whsakila2021";
+                                                 $database   = "dwo123";
                                                  $mysqli     = mysqli_connect($host, $user, $password, $database);
 
-                                                 $sql = "SELECT COUNT(store_id) jml_trans1 FROM fakta_pendapatan WHERE store_id=1";
+                                                 $sql = "SELECT SUM(Unit_Sold) UnitSoldTerritory FROM salesfact WHERE TerritoryID=6";
                                                  $query = mysqli_query($mysqli,$sql);
                                                  while($row2=mysqli_fetch_array($query)){
-                                                    echo number_format($row2['jml_trans1'],0,".",",");
+                                                    echo number_format($row2['UnitSoldTerritory'],0,".",".");
                                                  }
                                                 ?>  
                                                 </div>
@@ -228,13 +228,13 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Jumlah Transaksi di Toko Woodbridge</div>
+                                               Jumlah Unit Terjual di Wilayah German</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <?php
-                                            $sql = "SELECT COUNT(store_id) jml_trans2 FROM fakta_pendapatan WHERE store_id=2";
+                                           $sql = "SELECT SUM(Unit_Sold) UnitSoldTerritory FROM salesfact WHERE TerritoryID=8";
                                             $query = mysqli_query($mysqli,$sql);
                                                  while($row2=mysqli_fetch_array($query)){
-                                                    echo number_format($row2['jml_trans2'],0,".",",");
+                                                    echo number_format($row2['UnitSoldTerritory'],0,".",".");
                                                  }
                                             ?>
                                             </div>
@@ -262,7 +262,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Transaksi Per Store Setiap Bulan</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Data Unit Terjual per Wilayah Setiap Bulan</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -290,111 +290,12 @@
 
                         <!--tika-->
                         <!-- Pie Chart -->
-                        <div class="col-xl-8 col-lg-7">
+                       <!-- <!--  <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Pendapatan Per Store Berdasarkan Bulan</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body-store">
-                                    <div class="chart-area-store">
-                                        <!-- <canvas id="myAreaChart"></canvas> -->
-                                        <?php
-                                        $host       = "localhost";
-                                        $user       = "root";
-                                        $password   = "";
-                                        $database   = "dwo123";
-                                        $mysqli     = mysqli_connect($host, $user, $password, $database);
-                                        // Chart Pertama 
+                               
 
-                                        // Query Total Semua Amount
-                                        $sql = "SELECT SUM(amount) AS total FROM fakta_pendapatan";
-                                        $tot = mysqli_query($mysqli, $sql);
-                                        $tot_amount = mysqli_fetch_row($tot);
-
-                                        // Query Data Store dan Total Amountnya
-                                        $sql = "SELECT CONCAT('name:',s.nama_kota) as name, CONCAT('y:', SUM(fp.amount)*100/" . $tot_amount[0] .") as y, CONCAT('drilldown:', s.nama_kota) as drilldown 
-                                        FROM store s 
-                                        JOIN fakta_pendapatan fp ON (s.store_id = fp.store_id) 
-                                        GROUP BY name 
-                                        ORDER BY y DESC";
-                                        $all_kat = mysqli_query($mysqli,$sql);
-                                        while($row = mysqli_fetch_all($all_kat)) {
-                                            $data[] = $row;
-                                        }
-                                        $json_all_kat = json_encode($data);
-
-                                        // Chart Kedua
-
-                                        // Query SUM(Amount) Semua Kategori Film
-                                        $sql = "SELECT s.nama_kota nama_kota, sum(fp.amount) as tot_kat
-                                        FROM fakta_pendapatan fp
-                                        JOIN store s ON (s.store_id = fp.store_id)
-                                        GROUP BY nama_kota";
-                                        $hasil_kat = mysqli_query($mysqli,$sql);
-                                        while ($row = mysqli_fetch_all($hasil_kat)) {
-                                            $tot_all_kat[] = $row;
-                                        }
-
-                                        function cari_tot_kat($kat_dicari, $tot_all_kat){
-                                            $counter = 0;
-                                            while ( $counter < count($tot_all_kat[0]) ) {
-                                                if ($kat_dicari == $tot_all_kat[0][$counter][0]) {
-                                                    $tot_kat = $tot_all_kat[0][$counter][1];
-                                                    return $tot_kat;
-                                                }
-                                                $counter++;
-                                            }
-                                        }
-
-                                        // Query untuk ambil total penjualan di kategori berdasarkan bulan
-                                        $sql = "SELECT s.nama_kota nama_kota, t.bulan as bulan, SUM(fp.amount) as pendapatan_kat
-                                        FROM store s
-                                        JOIN fakta_pendapatan fp ON (s.store_id = fp.store_id)
-                                        JOIN time t ON (t.time_id = fp.time_id)
-                                        GROUP BY nama_kota, bulan";
-                                        $det_kat = mysqli_query($mysqli,$sql);
-
-                                        $i = 0;
-                                        while ($row = mysqli_fetch_all($det_kat)) {
-                                            $data_det[] = $row;
-                                        }
-
-                                        // DATA DRILL DOWN
-                                        $i = 0;
-
-                                        // Inisiasi String DATA
-                                        $string_data = "";
-                                        $string_data .= '{nama:"' . $data_det[0][$i][0] . '", id:"' . $data_det[0][$i][0] . '", data: [';
-
-                                        foreach($data_det[0] as $a){
-                                            if($i < count($data_det[0])-1){
-                                                if($a[0] != $data_det[0][$i+1][0]){
-                                                    $string_data .= '["' . $a[1] . '", ' . $a[2]*100/cari_tot_kat($a[0], $tot_all_kat) . ']]},';
-                                                    $string_data .= '{name:"' . $data_det[0][$i+1][0] . '", id:"' . $data_det[0][$i+1][0] . '", data: [';
-                                                }
-                                                else {
-                                                    $string_data .= '["' . $a[1] . '", ' . $a[2]*100/cari_tot_kat($a[0], $tot_all_kat) . '], ';
-                                                }
-                                            }
-                                            else {
-                                                $string_data .= '["' . $a[1] . '", ' . $a[2]*100/cari_tot_kat($a[0], $tot_all_kat). ']]}';
-                                            }
-
-                                            $i = $i+1;
-                                        }
-
-                                        ?>
-                                            <figure class="highcharts-figure">
-                                                <div id="container"></div>
-                                                <p class="highcharts-description"></p>
-                                            </figure>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                       
                         <!--tika-->
 
                         <!--anggik-->
@@ -576,11 +477,11 @@
         $host= "localhost";
         $user= "root";
         $password= "";
-        $database= "whsakila2021";
+        $database= "dwo123";
         $conn= mysqli_connect($host, $user, $password, $database);
-        $bulan = "SELECT CONCAT(MONTHNAME(t.tanggallengkap), ' ', YEAR(t.tanggallengkap)) bulan FROM fakta_pendapatan f JOIN time t ON f.time_id=t.time_id GROUP BY t.bulan ORDER BY t.tanggallengkap";
-        $amount = "SELECT count(fp.customer_id) as amount FROM store s JOIN fakta_pendapatan fp ON (s.store_id = fp.store_id) JOIN time t ON (t.time_id = fp.time_id) GROUP BY s.nama_kota, t.bulan HAVING s.nama_kota='Lethbridge'";
-        $amount1 = "SELECT count(customer_id) as amount FROM store s JOIN fakta_pendapatan fp ON (s.store_id = fp.store_id) JOIN time t ON (t.time_id = fp.time_id) GROUP BY s.nama_kota, t.bulan HAVING s.nama_kota='Woodridge'";
+        $bulan = "SELECT CONCAT(MONTHNAME(t.completeDate), ' ', YEAR(t.completeDate)) bulan FROM salesfact f JOIN time t ON f.DateID=t.DateID GROUP BY t.Month ORDER BY t.completeDate";
+        $amount = "SELECT sum(fp.Unit_Sold) as amount FROM territory s JOIN salesfact fp ON (s.TerritoryID = fp.TerritoryID) JOIN time t ON (t.DateID = fp.DateID) GROUP BY s.Name, t.Month HAVING s.Name='Canada'";
+        $amount1 = "SELECT sum(fp.Unit_Sold) as amount FROM territory s JOIN salesfact fp ON (s.TerritoryID = fp.TerritoryID) JOIN time t ON (t.DateID = fp.DateID) GROUP BY s.Name, t.Month HAVING s.Name='Germany'";
         $i=1;
         $query_bulan=mysqli_query($conn, $bulan);
         $jumlah_bulan = mysqli_num_rows($query_bulan);
@@ -630,7 +531,7 @@
           data: {
             labels: [<?php echo $chart_bulan; ?>],
             datasets: [{
-              label: "Lethbridge",
+              label: "Canada",
               lineTension: 0.3,
               backgroundColor: "rgba(78, 115, 223, 0.05)",
               borderColor: "rgba(78, 115, 223, 1)",
@@ -644,7 +545,7 @@
               pointBorderWidth: 2,
               data: [<?php echo $chart_amount;?>],
             },{
-              label: "Woodridge",
+              label: "Germany",
               lineTension: 0.3,
               backgroundColor: "rgba(0, 0, 0, 0.05)",
               borderColor: "rgba(0, 0, 0, 1)",

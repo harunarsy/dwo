@@ -67,9 +67,9 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="customer.php">
+                <a class="nav-link" href="sales.php">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Customer Chart</span>
+                    <span>Sales Chart</span>
                 </a>
             </li>
 
@@ -84,16 +84,16 @@
             <!-- <hr class="sidebar-divider"> -->
 
             <li class="nav-item">
-                <a class="nav-link" href="film.php">
+                <a class="nav-link" href="product.php">
                     <i class="fa fa-film"></i>
-                    <span>Film Chart</span>
+                    <span>Product Chart</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="stores.php">
                     <i class="fas fa-store"></i>
-                    <span>Store Chart</span>
+                    <span>Territory Chart</span>
                 </a>
             </li>
 
@@ -205,7 +205,7 @@
                                                  $sql = "SELECT SUM(Dollar_total) as Total_Nominal from salesfact";
                                                  $query = mysqli_query($mysqli,$sql);
                                                  while($row2=mysqli_fetch_array($query)){
-                                                    echo "$".number_format($row2['Total_Nominal'],0,".",",");
+                                                    echo "$".number_format($row2['Total_Nominal'],0,".",".");
                                                  }
                                                 ?>  
                                                 </div>
@@ -228,10 +228,10 @@
                                                 Jumlah Unit Total Terjual</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <?php
-                                            $sql = "SELECT SUM(UnitSold) as Total_sold from salesfact";
+                                            $sql = "SELECT SUM(Unit_Sold) as Total_sold from salesfact";
                                             $query = mysqli_query($mysqli,$sql);
                                                  while($row2=mysqli_fetch_array($query)){
-                                                    echo number_format($row2['Total_sold'],0,".",",");
+                                                    echo number_format($row2['Total_sold'],0,".",".");
                                                  }
                                             ?>
                                             </div>
@@ -259,7 +259,7 @@
                                                     $sql = "SELECT COUNT(SalesOrderID) as jumlah_penjualan from salesfact";
                                                      $query = mysqli_query($mysqli,$sql);
                                                         while($row2=mysqli_fetch_array($query)){
-                                                            echo number_format($row2['jumlah_penjualan'],0,".",",");
+                                                            echo number_format($row2['jumlah_penjualan'],0,".",".");
                                                         }
                                                     ?>
                                                     </div>
@@ -289,7 +289,7 @@
                                                     $sql = "SELECT COUNT(ProductID) as jumlah_produk from product";
                                                      $query = mysqli_query($mysqli,$sql);
                                                         while($row2=mysqli_fetch_array($query)){
-                                                            echo number_format($row2['jumlah_produk'],0,".",",");
+                                                            echo number_format($row2['jumlah_produk'],0,".",".");
                                                         }
                                                     ?>
                                             </div>

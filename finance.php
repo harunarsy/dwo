@@ -66,14 +66,14 @@
                 Chart Menu
             </div>
 
-            <li class="nav-item">
-                <a class="nav-link" href="customer.php">
+           <li class="nav-item">
+                <a class="nav-link" href="sales.php">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Customer Chart</span>
+                    <span>Sales Chart</span>
                 </a>
             </li>
 
-            <li class="nav-item active" >
+            <li class="nav-item">
                 <a class="nav-link" href="finance.php">
                     <i class="fa fa-balance-scale"></i>
                     <span>Finance Chart</span>
@@ -84,16 +84,16 @@
             <!-- <hr class="sidebar-divider"> -->
 
             <li class="nav-item">
-                <a class="nav-link" href="film.php">
+                <a class="nav-link" href="product.php">
                     <i class="fa fa-film"></i>
-                    <span>Film Chart</span>
+                    <span>Product Chart</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="stores.php">
                     <i class="fas fa-store"></i>
-                    <span>Store Chart</span>
+                    <span>Territory Chart</span>
                 </a>
             </li>
 
@@ -208,7 +208,7 @@
                                                  $sql = "SELECT SUM(Dollar_total) as total_pendapatan from salesfact";
                                                  $query = mysqli_query($mysqli,$sql);
                                                  while($row2=mysqli_fetch_array($query)){
-                                                    echo "$".number_format($row2['total_pendapatan'],0,".",",");
+                                                    echo "$".number_format($row2['total_pendapatan'],0,".",".");
                                                  }
                                                 ?>  
                                                 </div>
@@ -234,7 +234,7 @@
                                             $sql = "SELECT COUNT(SalesOrderID) as jumlah_transaksi from salesfact";
                                             $query = mysqli_query($mysqli,$sql);
                                                  while($row2=mysqli_fetch_array($query)){
-                                                    echo number_format($row2['jumlah_transaksi'],0,".",",");
+                                                    echo number_format($row2['jumlah_transaksi'],0,".",".");
                                                  }
                                             ?>
                                             </div>
@@ -265,7 +265,7 @@
                                                             where Year='2003'";
                                                      $query = mysqli_query($mysqli,$sql);
                                                         while($row2=mysqli_fetch_array($query)){
-                                                            echo "$".number_format($row2['tot_amount'],0,".",",");
+                                                            echo "$".number_format($row2['tot_amount'],0,".",".");
                                                         }
                                                     ?>
                                                     </div>
@@ -298,7 +298,7 @@
                                                             where Year='2004'";
                                                      $query = mysqli_query($mysqli,$sql);
                                                         while($row2=mysqli_fetch_array($query)){
-                                                            echo "$".number_format($row2['tot_amount'],0,".",",");
+                                                            echo "$".number_format($row2['tot_amount'],0,".",".");
                                                         }
                                                     ?>
                                             </div>
@@ -552,8 +552,10 @@
         $password= "";
         $database= "dwo123";
         $conn= mysqli_connect($host, $user, $password, $database);
-        $bulan = "SELECT CONCAT(MONTHNAME(t.completeDate)) bulan FROM salesfact sf JOIN time t ON sf.DateID=t.DateID GROUP BY t.Month ORDER BY t.completeDate";
-        $amount = "SELECT SUM(f.Dollar_total) amount FROM salesfact sf JOIN time t ON f.DateID=t.DateID GROUP BY t.Month ORDER BY t.compleDate";
+        $bulan = "SELECT CONCAT(MONTHNAME(t.completeDate), ' ', YEAR(t.completeDate)) bulan FROM salesfact sf JOIN time t ON sf.DateID=t.DateID GROUP BY t.Month ORDER BY t.completeDate";
+        $amount = "SELECT SUM(sf.Dollar_total) amount FROM salesfact sf JOIN time t ON sf.DateID=t.DateID GROUP BY t.Month ORDER BY t.completeDate";
+
+        
         $i=1;
         $query_bulan=mysqli_query($conn, $bulan);
         $jumlah_bulan = mysqli_num_rows($query_bulan);
